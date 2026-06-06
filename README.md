@@ -7,7 +7,7 @@
 ![Estado](https://img.shields.io/badge/Estado-Producción-success?style=for-the-badge)
 ![Tech Stack](https://img.shields.io/badge/Stack-React%20|%20Node.js%20|%20PostgreSQL-blueviolet?style=for-the-badge)
 
-Enova Concord centraliza el monitoreo técnico, el control de planes de servicio y la resolución de incidencias de tiendas e-commerce. Esta versión introduce un diseño multi-tenant con estilo e-ink, tableros Kanban y automatización de tickets vía correo electrónico.
+Enova Concord centraliza el monitoreo técnico, el control de planes de servicio y la resolución de incidencias de tiendas e-commerce. Esta versión introduce un diseño multi-tenant con estilo e-ink, tableros Kanban y reportes de rendimiento avanzados.
 
 ---
 
@@ -16,10 +16,6 @@ Enova Concord centraliza el monitoreo técnico, el control de planes de servicio
 ### 📊 Interfaz Analítica "e-Ink"
 * **Métricas SVG Dinámicas**: Panel de rendimiento avanzado que dibuja gráficas vectoriales de uso de RAM, tiempos de carga (Load) e interactividad (DOM) soportando hasta 7 tiendas en simultáneo.
 * **Cuadrícula Inteligente 3x3**: Maestro de clientes optimizado a 9 tarjetas por página con paginación integrada y badges de tecnologías por color.
-
-### 📧 Automatización IMAP
-* **Tickets Auto-generados**: El `EmailService` escucha en tiempo real la bandeja de entrada corporativa y convierte los correos electrónicos nuevos o respuestas en hilos de soporte técnico dentro de la base de datos.
-* **Procesamiento de Archivos**: Integración de Multer para la subida asíncrona de logotipos y adjuntos sin recargar el cliente web.
 
 ### 🛡️ Cortafuegos Multi-Tenant
 * **Parseo de Correos Híbrido**: El sistema JWT analiza listas de correos separadas por comas para asegurar que cada cliente acceda de forma estricta y exclusiva a los datos de su propia organización.
@@ -34,8 +30,9 @@ Enova Concord centraliza el monitoreo técnico, el control de planes de servicio
 * **Vista de Calendario**: Interfaz alternativa para auditar la carga operativa basada en la fecha de creación de los tickets.
 
 ### 2. Gestión de Clientes y Planes
-* **Estandarización**: Control estricto a nivel de base de datos de los planes admitidos (`GO`, `GROWTH`, `ESCALE`, `WARRANTY`, `LEAD`, etc.).
+* **Estandarización**: Control estricto a nivel de base de datos de los planes admitidos (`GO`, `GROWTH`, `ESCALE`, `WARRANTY`, `OUT_OF_WARRANTY`, `LEAD`).
 * **Contadores Automáticos**: Triggers lógicos que actualizan el historial de tickets reportados por cada tienda sin afectar el rendimiento.
+* **Gestión Segura de Archivos**: Endpoint centralizado con `multer` para el procesamiento y almacenamiento de logotipos corporativos con inyección directa en el frontend.
 
 ### 3. Seguridad Empresarial
 * **Hardening Integrado**: Uso de `helmet` para políticas de seguridad cruzada (CORS) y protección de cabeceras.
@@ -48,14 +45,14 @@ Enova Concord centraliza el monitoreo técnico, el control de planes de servicio
 * **Backend**: Node.js, Express.js, Knex.js (Query Builder).
 * **Base de Datos**: PostgreSQL 17.10.
 * **Frontend**: React 19, Vite, React Router DOM, Axios.
-* **Servicios Extra**: `imapflow` (Lectura de correos), `multer` (Archivos), `jsonwebtoken` (Auth).
+* **Servicios Extra**: `multer` (Procesamiento de Archivos), `jsonwebtoken` (Autenticación), `bcryptjs` (Cifrado).
 
 ---
 
 ## ⚙️ Instalación Rápida
 
 1.  **Clonar el repositorio e instalar dependencias:**
-```bash
+    ```bash
     # Backend
     cd ecrm-backend
     npm install
@@ -66,7 +63,7 @@ Enova Concord centraliza el monitoreo técnico, el control de planes de servicio
     ```
 
 2.  **Configurar `.env` (Backend):**
-```env
+    ```env
     PORT=3000
     DB_HOST=tu-servidor-postgresql.net
     DB_USER=tu_usuario
@@ -76,7 +73,7 @@ Enova Concord centraliza el monitoreo técnico, el control de planes de servicio
     ```
 
 3.  **Configurar `.env` (Frontend):**
-```env
+    ```env
     VITE_API_URL=http://localhost:3000/api
     ```
 
@@ -97,10 +94,9 @@ ecrm-root/
 │   │   ├── db/migrations/   # Esquemas PostgreSQL
 │   │   ├── repositories/    # Lógica de datos (Stores, Tickets, Metrics)
 │   │   ├── routes/          # Controladores API
-│   │   ├── services/        # Lógica de correos IMAP
 │   │   └── index.js         # Entry point, Rate Limiter y Auth
 ├── ecrm-frontend/
-│   ├── public/              # Assets estáticos
+│   ├── public/              # Assets estáticos y logos
 │   ├── src/
 │   │   ├── api/             # Configuración de Axios con JWT
 │   │   ├── components/      # Protected Routes
